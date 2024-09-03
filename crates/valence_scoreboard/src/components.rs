@@ -5,7 +5,6 @@ use derive_more::{Deref, DerefMut};
 use valence_server::entity::EntityLayerId;
 use valence_server::protocol::packets::play::scoreboard_display_s2c::ScoreboardPosition;
 use valence_server::protocol::packets::play::scoreboard_objective_update_s2c::ObjectiveRenderType;
-use valence_server::text::IntoText;
 use valence_server::Text;
 
 /// A string that identifies an objective. There is one scoreboard per
@@ -14,6 +13,14 @@ use valence_server::Text;
 ///
 /// Directly analogous to an Objective's Name.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Component, Deref)]
+#[require(
+    ObjectiveDisplay,
+    ObjectiveRenderType,
+    ObjectiveScores,
+    OldObjectiveScores,
+    ScoreboardPosition,
+    EntityLayerId
+)]
 pub struct Objective(pub(crate) String);
 
 impl Objective {
@@ -35,7 +42,7 @@ impl Objective {
 
 /// Optional display name for an objective. If not present, the objective's name
 /// is used.
-#[derive(Debug, Clone, PartialEq, Component, Deref, DerefMut)]
+#[derive(Debug, Clone, PartialEq, Component, Deref, DerefMut, Default)]
 pub struct ObjectiveDisplay(pub Text);
 
 /// A mapping of keys to their scores.
@@ -92,30 +99,5 @@ impl OldObjectiveScores {
         diff.extend(new_keys);
         diff.extend(removed_keys);
         diff
-    }
-}
-
-#[derive(Bundle)]
-pub struct ObjectiveBundle {
-    pub name: Objective,
-    pub display: ObjectiveDisplay,
-    pub render_type: ObjectiveRenderType,
-    pub scores: ObjectiveScores,
-    pub old_scores: OldObjectiveScores,
-    pub position: ScoreboardPosition,
-    pub layer: EntityLayerId,
-}
-
-impl Default for ObjectiveBundle {
-    fn default() -> Self {
-        Self {
-            name: Objective::new(""),
-            display: ObjectiveDisplay("".into_text()),
-            render_type: Default::default(),
-            scores: Default::default(),
-            old_scores: Default::default(),
-            position: Default::default(),
-            layer: Default::default(),
-        }
     }
 }

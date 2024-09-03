@@ -14,10 +14,9 @@ use valence_scoreboard::*;
 use valence_server::protocol::text::IntoText;
 
 fn spawn_scoreboard(mut commands: Commands) {
-	commands.spawn(ObjectiveBundle {
-		name: Objective::new("foo"),
-		display: ObjectiveDisplay("Foo".bold()),
-		..Default::default()
-	});
+	commands.spawn((
+		Objective::new("foo"),
+		ObjectiveDisplay("Foo".bold()),
+	));
 }
 ```

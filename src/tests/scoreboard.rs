@@ -35,13 +35,11 @@ fn show_scoreboard_when_added_to_layer() {
     helper.clear_received();
 
     // Spawn the objective.
-    app.world_mut().spawn(ObjectiveBundle {
-        name: Objective::new("foo"),
-        display: ObjectiveDisplay("Foo".into_text()),
-        scores: ObjectiveScores::new(),
-        layer: EntityLayerId(obj_layer),
-        ..Default::default()
-    });
+    app.world_mut().spawn((
+        Objective::new("foo"),
+        ObjectiveDisplay("Foo".into_text()),
+        EntityLayerId(obj_layer),
+    ));
 
     app.update();
 
@@ -75,13 +73,11 @@ fn show_scoreboard_when_client_join() {
         .insert(obj_layer);
 
     // Spawn the objective.
-    app.world_mut().spawn(ObjectiveBundle {
-        name: Objective::new("foo"),
-        display: ObjectiveDisplay("Foo".into_text()),
-        scores: ObjectiveScores::new(),
-        layer: EntityLayerId(obj_layer),
-        ..Default::default()
-    });
+    app.world_mut().spawn((
+        Objective::new("foo"),
+        ObjectiveDisplay("Foo".into_text()),
+        EntityLayerId(obj_layer),
+    ));
 
     // Process a tick to get past the "on join" logic.
     app.update();
@@ -118,13 +114,12 @@ fn should_update_score() {
     // Spawn the objective.
     let obj = app
         .world_mut()
-        .spawn(ObjectiveBundle {
-            name: Objective::new("foo"),
-            display: ObjectiveDisplay("Foo".into_text()),
-            scores: ObjectiveScores::with_map([("foo".to_owned(), 0)]),
-            layer: EntityLayerId(obj_layer),
-            ..Default::default()
-        })
+        .spawn((
+            Objective::new("foo"),
+            ObjectiveDisplay("Foo".into_text()),
+            ObjectiveScores::with_map([("foo".to_owned(), 0)]),
+            EntityLayerId(obj_layer),
+        ))
         .id();
 
     // Process a tick to get past the "on join" logic.
@@ -166,13 +161,12 @@ fn should_only_update_score_diff() {
     // Spawn the objective.
     let obj = app
         .world_mut()
-        .spawn(ObjectiveBundle {
-            name: Objective::new("foo"),
-            display: ObjectiveDisplay("Foo".into_text()),
-            scores: ObjectiveScores::with_map([("foo".to_owned(), 0), ("bar".to_owned(), 0)]),
-            layer: EntityLayerId(obj_layer),
-            ..Default::default()
-        })
+        .spawn((
+            Objective::new("foo"),
+            ObjectiveDisplay("Foo".into_text()),
+            ObjectiveScores::with_map([("foo".to_owned(), 0), ("bar".to_owned(), 0)]),
+            EntityLayerId(obj_layer),
+        ))
         .id();
 
     // Process a tick to get past the "on join" logic.

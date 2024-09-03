@@ -108,13 +108,12 @@ fn setup(
     commands.spawn(layer);
 
     let ctf_objective_layer = commands.spawn(EntityLayer::new(&server)).id();
-    let ctf_objective = ObjectiveBundle {
-        name: Objective::new("ctf-captures"),
-        display: ObjectiveDisplay("Captures".into_text()),
-        layer: EntityLayerId(ctf_objective_layer),
-        ..Default::default()
-    };
-    commands.spawn(ctf_objective);
+
+    commands.spawn((
+        Objective::new("ctf-captures"),
+        ObjectiveDisplay("Captures".into_text()),
+        EntityLayerId(ctf_objective_layer),
+    ));
 
     let red_capture_trigger =
         TriggerArea::new(red_flag.offset(-5, -3, -5), red_flag.offset(5, 3, 5));
