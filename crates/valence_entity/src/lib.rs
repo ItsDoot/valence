@@ -58,12 +58,10 @@ impl Plugin for EntityPlugin {
             .configure_sets(
                 PostUpdate,
                 (
-                    InitEntitiesSet,
-                    UpdateTrackedDataSet,
-                    ClearEntityChangesSet
-                        .after(InitEntitiesSet)
-                        .after(UpdateTrackedDataSet),
-                ),
+                    (InitEntitiesSet, UpdateTrackedDataSet),
+                    ClearEntityChangesSet,
+                )
+                    .chain(),
             )
             .add_systems(
                 PostUpdate,
@@ -300,7 +298,7 @@ pub struct OnGround(pub bool);
 /// something else on the tick the entity is added. If you need to know the ID
 /// ahead of time, set this component to the value returned by
 /// [`EntityManager::next_id`] before spawning.
-#[derive(Component, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Deref)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Deref)]
 pub struct EntityId(i32);
 
 impl EntityId {
@@ -314,6 +312,14 @@ impl EntityId {
 impl Default for EntityId {
     fn default() -> Self {
         Self(-1)
+    }
+}
+
+impl Component for EntityId {
+    const STORAGE_TYPE: bevy_ecs::component::StorageType = bevy_ecs::component::StorageType::Table;
+
+    fn register_component_hooks(hooks: &mut bevy_ecs::component::ComponentHooks) {
+        hooks.on_add(|world, entity, _comp| {});
     }
 }
 
