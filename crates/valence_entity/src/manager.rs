@@ -16,10 +16,13 @@ pub struct EntityManager {
 }
 
 impl EntityManager {
+    /// The starting entity ID. Id 0 is reserved for clients, so we start at 1.
+    const STARTING_ID: i32 = 1;
+
     pub(super) fn new() -> Self {
         Self {
             id_to_entity: FxHashMap::default(),
-            next_id: Wrapping(1), // Skip 0.
+            next_id: Wrapping(Self::STARTING_ID),
         }
     }
 
@@ -27,8 +30,7 @@ impl EntityManager {
     pub fn next_id(&mut self) -> EntityId {
         if self.next_id.0 == 0 {
             warn!("entity ID overflow!");
-            // ID 0 is reserved for clients, so skip over it.
-            self.next_id.0 = 1;
+            self.next_id.0 = Self::STARTING_ID;
         }
 
         let id = EntityId(self.next_id.0);
