@@ -140,7 +140,7 @@ fn setup(
     // add some debug entities to the ctf entity layers
     let mut flags = Flags::default();
     flags.set_glowing(true);
-    let mut pig = commands.spawn(PigEntityBundle {
+    let pig = commands.spawn(PigEntityBundle {
         layer: EntityLayerId(ctf_team_layers.friendly_layers[&Team::Red]),
         position: Position([-30.0, 65.0, 2.0].into()),
         entity_flags: flags.clone(),
@@ -148,7 +148,7 @@ fn setup(
     });
     pig.insert(Team::Red);
 
-    let mut cow = commands.spawn(CowEntityBundle {
+    let cow = commands.spawn(CowEntityBundle {
         layer: EntityLayerId(ctf_team_layers.friendly_layers[&Team::Blue]),
         position: Position([30.0, 65.0, 2.0].into()),
         entity_flags: flags,
@@ -638,7 +638,7 @@ fn do_team_selector_portals(
             // Copy the player entity to the friendly layer, and make them glow.
             let mut flags = Flags::default();
             flags.set_glowing(true);
-            let mut player_glowing = commands.spawn(PlayerEntityBundle {
+            let player_glowing = commands.spawn(PlayerEntityBundle {
                 layer: EntityLayerId(friendly_layer),
                 uuid: *unique_id,
                 entity_flags: flags,
@@ -648,7 +648,7 @@ fn do_team_selector_portals(
             player_glowing.insert(ClonedEntity(player));
 
             let enemy_layer = ctf_layers.enemy_layers[&team];
-            let mut player_enemy = commands.spawn(PlayerEntityBundle {
+            let player_enemy = commands.spawn(PlayerEntityBundle {
                 layer: EntityLayerId(enemy_layer),
                 uuid: *unique_id,
                 position: *pos,
