@@ -32,21 +32,14 @@ impl Plugin for ScoreboardPlugin {
         app.add_systems(
             PostUpdate,
             (
-                create_or_update_objectives,
-                display_objectives.after(create_or_update_objectives),
+                remove_despawned_objectives,
+                (
+                    (create_or_update_objectives, display_objectives).chain(),
+                    handle_new_clients,
+                ),
+                update_scores,
             )
-                .in_set(ScoreboardSet),
-        )
-        .add_systems(
-            PostUpdate,
-            remove_despawned_objectives.in_set(ScoreboardSet),
-        )
-        .add_systems(PostUpdate, handle_new_clients.in_set(ScoreboardSet))
-        .add_systems(
-            PostUpdate,
-            update_scores
-                .after(create_or_update_objectives)
-                .after(handle_new_clients)
+                .chain()
                 .in_set(ScoreboardSet),
         );
     }
